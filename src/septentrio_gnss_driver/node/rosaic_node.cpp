@@ -180,6 +180,9 @@ namespace rosaic_node {
         // multi_antenna param
         param("multi_antenna", settings_.multi_antenna, false);
 
+        // PPP param
+        param("ppp", settings_.ppp, false);
+
         // Publishing parameters
         param("publish.auto_publish", settings_.auto_publish, false);
         param("publish.publish_only_valid", settings_.publish_only_valid, false);
@@ -769,7 +772,7 @@ namespace rosaic_node {
 
         settings::autoPublish(this, settings_);
 
-        // To be implemented: RTCM, raw data settings, PPP, SBAS ...
+        // To be implemented: RTCM, raw data settings, SBAS ...
         this->log(log_level::DEBUG, "Finished getROSParams() method");
         return true;
     }

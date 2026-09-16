@@ -107,6 +107,10 @@ Please [let the maintainers know](mailto:githubuser@septentrio.com?subject=[GitH
   
   receiver_type: gnss
 
+  multi_antenna: true
+
+  ppp: false
+
   datum: Default
 
   poi_to_arp:
@@ -608,6 +612,13 @@ The following is a list of ROSaic parameters found in the `config/rover.yaml` fi
         + default: "auto"
       + `keep_open`: determines wether this connection shall be kept open. If set to `true` the Rx will still be able to receive RTK corrections to improve precision after driver is shut down.
         + default: true
+  </details>
+
+  <details>
+  <summary>PPP and Galileo HAS</summary>
+  
+  + `ppp`: Enables Precise Point Precision (PPP) when `true`. This enables Galileo High Accuracy Service (HAS) when an E6-capable antenna is connected and the receiver is set up to track and use the GALE6BC signal.
+    + default: `false`
   </details>
   
   <details>
