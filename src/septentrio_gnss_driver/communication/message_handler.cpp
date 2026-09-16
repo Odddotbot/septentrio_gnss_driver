@@ -2862,6 +2862,14 @@ namespace io {
             {
             case 0:
             {
+                if (settings_->publish_nmea_as_sentence)
+                {
+                    NmeaSentenceMsg nmsg;
+                    nmsg.sentence = message;
+                    assembleHeader(settings_->frame_id, telegram, nmsg);
+                    publish<NmeaSentenceMsg>("gpgga", nmsg);
+                    break;
+                }
                 // Create NmeaSentence struct to pass to GpggaParser::parseASCII
                 NMEASentence gga_message(id, body);
                 GpggaMsg msg;
@@ -2882,6 +2890,14 @@ namespace io {
             }
             case 1:
             {
+                if (settings_->publish_nmea_as_sentence)
+                {
+                    NmeaSentenceMsg nmsg;
+                    nmsg.sentence = message;
+                    assembleHeader(settings_->frame_id, telegram, nmsg);
+                    publish<NmeaSentenceMsg>("gprmc", nmsg);
+                    break;
+                }
                 // Create NmeaSentence struct to pass to GprmcParser::parseASCII
                 NMEASentence rmc_message(id, body);
                 GprmcMsg msg;
@@ -2902,6 +2918,14 @@ namespace io {
             }
             case 2:
             {
+                if (settings_->publish_nmea_as_sentence)
+                {
+                    NmeaSentenceMsg nmsg;
+                    nmsg.sentence = message;
+                    assembleHeader(settings_->frame_id, telegram, nmsg);
+                    publish<NmeaSentenceMsg>("gpgsa", nmsg);
+                    break;
+                }
                 // Create NmeaSentence struct to pass to GpgsaParser::parseASCII
                 NMEASentence gsa_message(id, body);
                 GpgsaMsg msg;
@@ -2941,6 +2965,14 @@ namespace io {
             case 3:
             case 4:
             {
+                if (settings_->publish_nmea_as_sentence)
+                {
+                    NmeaSentenceMsg nmsg;
+                    nmsg.sentence = message;
+                    assembleHeader(settings_->frame_id, telegram, nmsg);
+                    publish<NmeaSentenceMsg>("gpgsv", nmsg);
+                    break;
+                }
                 // Create NmeaSentence struct to pass to GpgsvParser::parseASCII
                 NMEASentence gsv_message(id, body);
                 GpgsvMsg msg;
