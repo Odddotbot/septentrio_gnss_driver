@@ -452,12 +452,15 @@ namespace io {
                        << settings_->ant_aux1_serial_nr << "\x0D";
                     send(ss.str());
                 }
+            }
 
-                // Configure PPP
-                if (settings_->ppp)
-                {
-                    send("spm, , +PPP \x0D");
-                }
+            // Configure PPP
+            if (settings_->ppp)
+            {
+                send("spm, , +PPP \x0D");
+            } else
+            {
+                send("spm, , -PPP \x0D");
             }
 
             // Configuring the corrections connection
