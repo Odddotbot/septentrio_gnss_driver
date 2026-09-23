@@ -2211,6 +2211,18 @@ namespace io {
         }
     }
 
+    template <typename M>
+    void MessageHandler::publishNmeaSentence(const std::string& message, const M& msg)
+    {
+        if (!settings_->publish_nmea_sentence)
+            return;
+
+        NmeaSentenceMsg sentence_msg;
+        sentence_msg.header = msg.header;
+        sentence_msg.sentence = message.substr(0, message.find_last_not_of("\r\n") + 1);
+        publish<NmeaSentenceMsg>("nmea_sentence", sentence_msg);
+    }
+
     /**
      * If GNSS time is used, Publishing is only done with valid leap seconds
      */
@@ -2862,14 +2874,6 @@ namespace io {
             {
             case 0:
             {
-                if (settings_->publish_nmea_as_sentence)
-                {
-                    NmeaSentenceMsg nmsg;
-                    nmsg.sentence = message;
-                    assembleHeader(settings_->frame_id, telegram, nmsg);
-                    publish<NmeaSentenceMsg>("gpgga", nmsg);
-                    break;
-                }
                 // Create NmeaSentence struct to pass to GpggaParser::parseASCII
                 NMEASentence gga_message(id, body);
                 GpggaMsg msg;
@@ -2885,19 +2889,12 @@ namespace io {
                                "GpggaMsg: " + std::string(e.what()));
                     break;
                 }
+                publishNmeaSentence(message, msg);
                 publish<GpggaMsg>("gpgga", msg);
                 break;
             }
             case 1:
             {
-                if (settings_->publish_nmea_as_sentence)
-                {
-                    NmeaSentenceMsg nmsg;
-                    nmsg.sentence = message;
-                    assembleHeader(settings_->frame_id, telegram, nmsg);
-                    publish<NmeaSentenceMsg>("gprmc", nmsg);
-                    break;
-                }
                 // Create NmeaSentence struct to pass to GprmcParser::parseASCII
                 NMEASentence rmc_message(id, body);
                 GprmcMsg msg;
@@ -2913,19 +2910,12 @@ namespace io {
                                "GprmcMsg: " + std::string(e.what()));
                     break;
                 }
+                publishNmeaSentence(message, msg);
                 publish<GprmcMsg>("gprmc", msg);
                 break;
             }
             case 2:
             {
-                if (settings_->publish_nmea_as_sentence)
-                {
-                    NmeaSentenceMsg nmsg;
-                    nmsg.sentence = message;
-                    assembleHeader(settings_->frame_id, telegram, nmsg);
-                    publish<NmeaSentenceMsg>("gpgsa", nmsg);
-                    break;
-                }
                 // Create NmeaSentence struct to pass to GpgsaParser::parseASCII
                 NMEASentence gsa_message(id, body);
                 GpgsaMsg msg;
@@ -2959,20 +2949,13 @@ namespace io {
                     }
                 } else
                     msg.header.stamp = timestampToRos(telegram->stamp);
+                publishNmeaSentence(message, msg);
                 publish<GpgsaMsg>("gpgsa", msg);
                 break;
             }
             case 3:
             case 4:
             {
-                if (settings_->publish_nmea_as_sentence)
-                {
-                    NmeaSentenceMsg nmsg;
-                    nmsg.sentence = message;
-                    assembleHeader(settings_->frame_id, telegram, nmsg);
-                    publish<NmeaSentenceMsg>("gpgsv", nmsg);
-                    break;
-                }
                 // Create NmeaSentence struct to pass to GpgsvParser::parseASCII
                 NMEASentence gsv_message(id, body);
                 GpgsvMsg msg;
@@ -3007,6 +2990,7 @@ namespace io {
                     }
                 } else
                     msg.header.stamp = timestampToRos(telegram->stamp);
+                publishNmeaSentence(message, msg);
                 publish<GpgsvMsg>("gpgsv", msg);
                 break;
             }
