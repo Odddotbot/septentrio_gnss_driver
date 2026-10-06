@@ -309,7 +309,7 @@ namespace io {
             node_->log(log_level::INFO, "Setting up Rx.");
 
             // Reset to default configuration
-            send("eccf, RxDefault, Current \x0D")
+            send("eccf, RxDefault, Current \x0D");
 
             std::string pvt_interval =
                 parsing_utilities::convertUserPeriodToRxCommand(
