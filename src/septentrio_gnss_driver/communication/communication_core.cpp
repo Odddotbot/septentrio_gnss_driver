@@ -308,6 +308,9 @@ namespace io {
         {
             node_->log(log_level::INFO, "Setting up Rx.");
 
+            // Reset to default configuration
+            send("eccf, RxDefault, Current \x0D");
+
             std::string pvt_interval =
                 parsing_utilities::convertUserPeriodToRxCommand(
                     settings_->polling_period_pvt);
@@ -458,9 +461,6 @@ namespace io {
             if (settings_->ppp)
             {
                 send("spm, , +PPP \x0D");
-            } else
-            {
-                send("spm, , -PPP \x0D");
             }
 
             // Configuring the corrections connection
@@ -1020,8 +1020,6 @@ namespace io {
                     }
                 }
             }
-            // Save config to boot
-            send("eccf, Current, Boot\x0D");
         }
 
         if (settings_->septentrio_receiver_type == "ins")
