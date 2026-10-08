@@ -92,16 +92,16 @@
 //! Mode field
 enum TypeOfPVT_Enum
 {
-    evNoPVT,
-    evStandAlone,
-    evDGPS,
-    evFixed,
-    evRTKFixed,
-    evRTKFloat,
-    evSBAS,
-    evMovingBaseRTKFixed,
-    evMovingBaseRTKFloat,
-    evPPP
+    evNoPVT = 0,
+    evStandAlone = 1,
+    evDGPS = 2,
+    evFixed = 3,
+    evRTKFixed = 4,
+    evRTKFloat = 5,
+    evSBAS = 6,
+    evMovingBaseRTKFixed = 7,
+    evMovingBaseRTKFloat = 8,
+    evPPP = 10 // 9 is reserved
 };
 
 enum SbfId
