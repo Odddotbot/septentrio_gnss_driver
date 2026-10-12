@@ -290,7 +290,6 @@ namespace io {
             gnss_status.level = DiagnosticStatusMsg::ERROR;
         }
         // Creating an array of values associated with the GNSS status
-        gnss_status.values.resize(static_cast<uint16_t>(last_qualityind_.n - 1));
         for (uint16_t i = static_cast<uint16_t>(0);
              i != static_cast<uint16_t>(last_qualityind_.n); ++i)
         {
@@ -298,56 +297,58 @@ namespace io {
             {
                 continue;
             }
+            decltype(gnss_status.values)::value_type kv;
             if ((last_qualityind_.indicators[i] & indicators_type_mask) ==
                 static_cast<uint16_t>(1))
             {
-                gnss_status.values[i].key = "GNSS Signals, Main Antenna";
-                gnss_status.values[i].value = std::to_string(
+                kv.key = "GNSS Signals, Main Antenna";
+                kv.value = std::to_string(
                     (last_qualityind_.indicators[i] & indicators_value_mask) >> 8);
             } else if ((last_qualityind_.indicators[i] & indicators_type_mask) ==
                        static_cast<uint16_t>(2))
             {
-                gnss_status.values[i].key = "GNSS Signals, Aux1 Antenna";
-                gnss_status.values[i].value = std::to_string(
+                kv.key = "GNSS Signals, Aux1 Antenna";
+                kv.value = std::to_string(
                     (last_qualityind_.indicators[i] & indicators_value_mask) >> 8);
             } else if ((last_qualityind_.indicators[i] & indicators_type_mask) ==
                        static_cast<uint16_t>(11))
             {
-                gnss_status.values[i].key = "RF Power, Main Antenna";
-                gnss_status.values[i].value = std::to_string(
+                kv.key = "RF Power, Main Antenna";
+                kv.value = std::to_string(
                     (last_qualityind_.indicators[i] & indicators_value_mask) >> 8);
             } else if ((last_qualityind_.indicators[i] & indicators_type_mask) ==
                        static_cast<uint16_t>(12))
             {
-                gnss_status.values[i].key = "RF Power, Aux1 Antenna";
-                gnss_status.values[i].value = std::to_string(
+                kv.key = "RF Power, Aux1 Antenna";
+                kv.value = std::to_string(
                     (last_qualityind_.indicators[i] & indicators_value_mask) >> 8);
             } else if ((last_qualityind_.indicators[i] & indicators_type_mask) ==
                        static_cast<uint16_t>(21))
             {
-                gnss_status.values[i].key = "CPU Headroom";
-                gnss_status.values[i].value = std::to_string(
+                kv.key = "CPU Headroom";
+                kv.value = std::to_string(
                     (last_qualityind_.indicators[i] & indicators_value_mask) >> 8);
             } else if ((last_qualityind_.indicators[i] & indicators_type_mask) ==
                        static_cast<uint16_t>(25))
             {
-                gnss_status.values[i].key = "OCXO Stability";
-                gnss_status.values[i].value = std::to_string(
+                kv.key = "OCXO Stability";
+                kv.value = std::to_string(
                     (last_qualityind_.indicators[i] & indicators_value_mask) >> 8);
             } else if ((last_qualityind_.indicators[i] & indicators_type_mask) ==
                        static_cast<uint16_t>(30))
             {
-                gnss_status.values[i].key = "Base Station Measurements";
-                gnss_status.values[i].value = std::to_string(
+                kv.key = "Base Station Measurements";
+                kv.value = std::to_string(
                     (last_qualityind_.indicators[i] & indicators_value_mask) >> 8);
             } else
             {
                 assert((last_qualityind_.indicators[i] & indicators_type_mask) ==
                        static_cast<uint16_t>(31));
-                gnss_status.values[i].key = "RTK Post-Processing";
-                gnss_status.values[i].value = std::to_string(
+                kv.key = "RTK Post-Processing";
+                kv.value = std::to_string(
                     (last_qualityind_.indicators[i] & indicators_value_mask) >> 8);
             }
+            gnss_status.values.push_back(kv);
         }
         gnss_status.hardware_id = serialnumber;
         gnss_status.name = "septentrio_driver: Quality indicators";
